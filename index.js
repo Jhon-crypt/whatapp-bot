@@ -139,12 +139,12 @@ async function startWhatsAppBot() {
                         console.log(`📩 ${chat.unreadCount} unread message(s)`);
                         console.log(`💬 Last message: ${chat.lastMessage}`);
                         console.log(`🕒 ${chat.timestamp}`);
-                        console.log(`📋 Type: ${chat.type}`);
+                        // console.log(`📋 Type: ${chat.type}`);
                         console.log('----------------------------');
                     });
                     console.log(`\nTotal chats with unread messages: ${unreadChats.length}`);
-                    console.log(`Groups: ${unreadChats.filter(c => c.isGroup).length}`);
-                    console.log(`Contacts: ${unreadChats.filter(c => !c.isGroup).length}`);
+                    // console.log(`Groups: ${unreadChats.filter(c => c.isGroup).length}`);
+                    // console.log(`Contacts: ${unreadChats.filter(c => !c.isGroup).length}`);
                 } else {
                     console.log('No unread messages found. Waiting for new messages...');
                 }
