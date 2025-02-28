@@ -1,11 +1,13 @@
 const puppeteer = require('puppeteer');
 const qrcode = require('qrcode-terminal');
+// const { clickSearch } = require('./click-search.js');
 
 async function startWhatsAppBot() {
     try {
         // Launch the browser
         const browser = await puppeteer.launch({
             headless: false,
+            userDataDir: './my-session', // Save session data in this folder
             executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
             args: ['--no-sandbox']
         });
@@ -131,58 +133,142 @@ async function startWhatsAppBot() {
                     return;
                 }
 
-                // Print the unread messages summary
+                // Print the unread messages summary and collect names
                 if (unreadChats.length > 0) {
                     console.log('\n=== Unread Messages Summary ===');
-                    unreadChats.forEach(chat => {
+                    
+                    // Array to store all chat names
+                    const unreadChatNames = [];
+                    
+                    // Process each unread chat
+                    for (const chat of unreadChats) {
                         console.log(`\n${chat.isGroup ? '👥' : '👤'} ${chat.title} ${chat.isMuted ? '🔇' : ''}`);
                         console.log(`📩 ${chat.unreadCount} unread message(s)`);
                         console.log(`💬 Last message: ${chat.lastMessage}`);
                         console.log(`🕒 ${chat.timestamp}`);
-                        // console.log(`📋 Type: ${chat.type}`);
                         console.log('----------------------------');
-                    });
-                    console.log(`\nTotal chats with unread messages: ${unreadChats.length}`);
-                    // console.log(`Groups: ${unreadChats.filter(c => c.isGroup).length}`);
-                    // console.log(`Contacts: ${unreadChats.filter(c => !c.isGroup).length}`);
-                } else {
-                    console.log('No unread messages found. Waiting for new messages...');
-                }
 
+                        // Add chat name to our list
+                        unreadChatNames.push({
+                            name: chat.title,
+                            isGroup: chat.isGroup,
+                            unreadCount: chat.unreadCount
+                        });
+                    }
+                    
+                    // Print compiled list of chat names
+                    console.log('\n=== Compiled List of Unread Chats ===');
+                    console.log('Individual Chats:');
+                    const individualChats = unreadChatNames.filter(chat => !chat.isGroup);
+                    individualChats.forEach(chat => {
+                        console.log(`- ${chat.name} (${chat.unreadCount} unread)`);
+                    });
+
+                    console.log('\nGroup Chats:');
+                    const groupChats = unreadChatNames.filter(chat => chat.isGroup);
+                    groupChats.forEach(chat => {
+                        console.log(`- ${chat.name} (${chat.unreadCount} unread)`);
+                    });
+
+                    console.log(`\nTotal unread chats: ${unreadChatNames.length}`);
+                    console.log(`Individual chats: ${individualChats.length}`);
+                    console.log(`Group chats: ${groupChats.length}`);
+
+                    // Only search for the first chat in the list
+                    if (unreadChatNames.length > 0) {
+                        const firstChat = unreadChatNames[0];
+                        console.log(`\nSearching first chat: ${firstChat.name}`);
+                        
+                        // Click the search button
+                        await page.waitForSelector('button._ai0b._ai08[aria-label="Search or start new chat"]');
+                        await page.evaluate(() => {
+                            const searchButton = document.querySelector('button._ai0b._ai08[aria-label="Search or start new chat"]');
+                            if (searchButton) searchButton.click();
+                        });
+
+                        // Wait for search input to be ready
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        await page.waitForSelector('div[contenteditable="true"][data-tab="3"]');
+
+                        // Clear any existing search text
+                        await page.evaluate(() => {
+                            const searchInput = document.querySelector('div[contenteditable="true"][data-tab="3"]');
+                            if (searchInput) {
+                                searchInput.textContent = '';
+                                searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+                            }
+                        });
+
+                        // Type the chat name using page.type()
+                        await page.type('div[contenteditable="true"][data-tab="3"]', firstChat.name);
+                        console.log('Typed chat name:', firstChat.name);
+
+                        // Wait for 2 seconds before pressing Enter
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        console.log('Waiting 2 seconds before pressing Enter...');
+
+                        // Press Enter
+                        await page.keyboard.press('Enter');
+                        console.log('Pressed Enter key');
+
+                        // Wait for chat container to load
+                        await page.waitForSelector('div[role="application"]');
+                        console.log('Chat container loaded');
+
+                        // Return to search form by clicking search button again
+                        await page.waitForSelector('button._ai0b._ai08[aria-label="Search or start new chat"]');
+                        await page.evaluate(() => {
+                            const searchButton = document.querySelector('button._ai0b._ai08[aria-label="Search or start new chat"]');
+                            if (searchButton) searchButton.click();
+                        });
+                        console.log('Returned to search form');
+
+                        // Wait for search input to be ready
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        await page.waitForSelector('div[aria-label="Search"][role="textbox"]');
+
+                        // Clear the search form by pressing backspace
+                        const inputValue = await page.$eval('div[aria-label="Search"][role="textbox"]', el => el.textContent.length);
+                        for (let i = 0; i < inputValue; i++) {
+                            await page.keyboard.press('Backspace');
+                        }
+                        console.log('Cleared search form using backspace');
+
+                        // Fetch messages from the chat
+                        const messages = await page.evaluate(() => {
+                            const messageElements = document.querySelectorAll('div[class*="_amjv"]');
+                            return Array.from(messageElements).map(msg => {
+                                const messageText = msg.querySelector('span.selectable-text.copyable-text');
+                                const timestamp = msg.querySelector('span[class*="x1c4vz4f x2lah0s"]');
+                                const isOutgoing = msg.classList.contains('message-out');
+                                
+                                return {
+                                    text: messageText ? messageText.textContent : '',
+                                    time: timestamp ? timestamp.textContent : '',
+                                    type: isOutgoing ? 'sent' : 'received'
+                                };
+                            }).filter(m => m.text);
+                        });
+
+                        console.log('Chat messages:', messages);
+
+                        // Click the search icon using page.click()
+                        await page.waitForSelector('span[data-icon="search"]');
+                        await page.click('span[data-icon="search"]');
+                        console.log('Clicked search icon');
+                    }
+                } else {
+                    console.log('No unread messages found.');
+                }
             } catch (error) {
                 console.error('Error checking messages:', error);
             }
-            
-            // Schedule the next check
-            setTimeout(checkMessages, 5000);
         }
 
-        // Function to handle different filters
-        async function handleFilters() {
-            // Start with unread messages
-            console.log('Switching to unread messages filter...');
-            await switchFilter('unread');
-            await checkMessages();
-
-            // Allow switching filters via console input
-            const readline = require('readline').createInterface({
-                input: process.stdin,
-                output: process.stdout
-            });
-
-            readline.on('line', async (input) => {
-                const filter = input.toLowerCase();
-                if (['all', 'unread', 'favorites', 'group'].includes(filter)) {
-                    console.log(`Switching to ${filter} filter...`);
-                    await switchFilter(filter);
-                } else {
-                    console.log('Available filters: all, unread, favorites, group');
-                }
-            });
-        }
-
-        // Start handling filters
-        handleFilters();
+        // Start the process once
+        console.log('Switching to unread messages filter...');
+        await switchFilter('unread');
+        await checkMessages();
 
     } catch (error) {
         console.error('An error occurred:', error);
