@@ -1,6 +1,52 @@
 const puppeteer = require('puppeteer');
 const qrcode = require('qrcode-terminal');
+const fs = require('fs').promises;
+const path = require('path');
 // const { clickSearch } = require('./click-search.js');
+
+// Function to save or update messages in a single JSON file
+async function saveMessagesToJson(chatName, messages, isGroup) {
+    try {
+        // Create messages directory if it doesn't exist
+        const messagesDir = path.join(__dirname, 'messages');
+        await fs.mkdir(messagesDir, { recursive: true });
+
+        const timestamp = new Date().toISOString().split('T')[0];
+        const fileName = `whatsapp_messages_${timestamp}.json`;
+        const filePath = path.join(messagesDir, fileName);
+
+        // Read existing data or create new structure
+        let allMessages = {};
+        try {
+            const existingData = await fs.readFile(filePath, 'utf8');
+            allMessages = JSON.parse(existingData);
+        } catch (error) {
+            // File doesn't exist or is invalid, create new structure
+            allMessages = {
+                date: timestamp,
+                last_updated: new Date().toISOString(),
+                chats: {}
+            };
+        }
+
+        // Update the messages for this chat
+        allMessages.chats[chatName] = {
+            chatName,
+            isGroup,
+            last_updated: new Date().toISOString(),
+            messages
+        };
+
+        // Update the last_updated timestamp
+        allMessages.last_updated = new Date().toISOString();
+
+        // Write back to file with pretty printing
+        await fs.writeFile(filePath, JSON.stringify(allMessages, null, 2));
+        console.log(`Messages updated in ${fileName}`);
+    } catch (error) {
+        console.error(`Error saving messages for ${chatName}:`, error);
+    }
+}
 
 async function startWhatsAppBot() {
     try {
@@ -27,22 +73,31 @@ async function startWhatsAppBot() {
         // Function to switch filter
         async function switchFilter(filterType) {
             try {
+                console.log(`Attempting to switch to ${filterType} filter...`);
+                
                 // Wait for the filter buttons to be present
-                await page.waitForSelector('[role="tablist"][aria-label="chat-list-filters"]');
+                await page.waitForSelector('[role="tablist"][aria-label="chat-list-filters"]', { timeout: 10000 });
+                console.log('Found filter tablist');
                 
                 // Use the exact ID for the filter button
                 const buttonSelector = `#${filterType}-filter`;
-                await page.waitForSelector(buttonSelector);
+                await page.waitForSelector(buttonSelector, { timeout: 10000 });
+                console.log('Found filter button');
                 
                 // Click the button using evaluate for a more direct click
                 await page.evaluate((selector) => {
                     const button = document.querySelector(selector);
-                    if (button) button.click();
+                    if (button) {
+                        console.log('Clicking filter button...');
+                        button.click();
+                    } else {
+                        console.log('Filter button not found in evaluate');
+                    }
                 }, buttonSelector);
 
-                // Wait for the filter to be applied using delay
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                console.log(`Successfully switched to ${filterType} filter`);
+                // Wait longer for the filter to be applied
+                await new Promise(resolve => setTimeout(resolve, 5000));
+                console.log(`Switched to ${filterType} filter and waited 5 seconds`);
             } catch (error) {
                 console.error(`Error switching to ${filterType} filter:`, error);
             }
@@ -51,76 +106,91 @@ async function startWhatsAppBot() {
         // Function to check for messages based on current filter
         async function checkMessages() {
             try {
-                // Wait for chats to load with a longer timeout
-                await new Promise(resolve => setTimeout(resolve, 3000));
+                console.log('Starting to check for unread messages...');
+                
+                // Wait longer for chats to load
+                await new Promise(resolve => setTimeout(resolve, 5000));
+                console.log('Waited 5 seconds for initial load');
 
                 // First ensure the chat list is loaded using the exact role and aria-label
-                await page.waitForSelector('div[role="grid"][aria-label="Chat list"]', { timeout: 10000 })
+                await page.waitForSelector('div[role="grid"][aria-label="Chat list"]', { timeout: 15000 })
+                    .then(() => console.log('Chat list found'))
                     .catch(() => console.log('Chat list not found, retrying...'));
 
                 // Get unread chats using the actual WhatsApp Web structure
                 const unreadChats = await page.evaluate(() => {
                     try {
+                        console.log('Starting chat evaluation...');
                         const chatList = document.querySelector('div[role="grid"][aria-label="Chat list"]');
                         if (!chatList) {
                             console.log('Chat list not found in DOM');
                             return [];
                         }
 
-                        // Use multiple selectors to ensure we find chat items
+                        // Log the number of list items found
                         const chatItems = Array.from(chatList.querySelectorAll('div[role="listitem"]'));
-                        if (!chatItems || chatItems.length === 0) {
-                            console.log('No chat items found');
-                            return [];
-                        }
+                        console.log(`Found ${chatItems.length} chat items`);
 
                         const unreadItems = [];
 
-                        chatItems.forEach(item => {
+                        chatItems.forEach((item, index) => {
                             try {
-                                // Multiple ways to detect unread messages
-                                const unreadBadge = item.querySelector('span[aria-label*="unread message"], span[aria-label*="messages unread"]');
-                                if (!unreadBadge) return;
+                                // Log each chat item being processed
+                                console.log(`Processing chat item ${index + 1}...`);
 
-                                // Get chat title with fallback methods
-                                const titleSpan = item.querySelector('span[title], [data-testid="contact-name"]');
-                                const title = titleSpan ? (titleSpan.getAttribute('title') || titleSpan.textContent) : 'Unknown Chat';
-
-                                // Get unread count with better parsing
-                                const unreadLabel = unreadBadge.getAttribute('aria-label') || '';
-                                const unreadMatch = unreadLabel.match(/(\d+)/);
-                                const unreadCount = unreadMatch ? parseInt(unreadMatch[0]) : 1;
-
-                                // Get last message with multiple selectors
-                                const lastMessageEl = item.querySelector('.x78zum5.x1cy8zhl, [data-testid="last-message"]');
-                                const lastMessage = lastMessageEl?.textContent?.trim() || '';
-
-                                // Get timestamp with multiple selectors
-                                const timestampEl = item.querySelector('._ak8i, [data-testid="last-message-time"]');
-                                const timestamp = timestampEl?.textContent?.trim() || '';
-
-                                // Additional chat type detection
-                                const isGroup = !!item.querySelector('[data-testid="group"]');
-                                const isMuted = !!item.querySelector('[data-testid="muted"]');
+                                // Check for any unread indicators
+                                const unreadBadge = item.querySelector('span[aria-label="Unread"]') || 
+                                                  item.querySelector('span[class*="unread"]') ||
+                                                  item.querySelector('span[class*="x1rg5ohu"][class*="x1xaadd7"][class*="x1pg5gke"]');
                                 
-                                if (unreadCount > 0) {
+                                // Also check for number badges
+                                const numberBadge = item.querySelector('span[class*="_19RFN"]') ||
+                                                  item.querySelector('span[class*="unread-count"]');
+
+                                if (unreadBadge || numberBadge) {
+                                    console.log(`Found unread indicators in chat ${index + 1}`);
+                                    
+                                    // Get chat title with enhanced fallback methods
+                                    const titleSpan = item.querySelector([
+                                        'span[title]',
+                                        '[data-testid="contact-name"]',
+                                        '[data-testid="group-name"]',
+                                        'span[class*="zoWT4"]',
+                                        'span[dir="auto"]'
+                                    ].join(', '));
+                                    const title = titleSpan ? (titleSpan.getAttribute('title') || titleSpan.textContent) : 'Unknown Chat';
+
+                                    // Enhanced unread count detection
+                                    let unreadCount = 1;
+                                    if (unreadBadge || numberBadge) {
+                                        const badge = numberBadge || unreadBadge;
+                                        const badgeText = badge.textContent.trim();
+                                        if (/^\d+$/.test(badgeText)) {
+                                            unreadCount = parseInt(badgeText);
+                                        }
+                                    }
+
+                                    // Additional chat type detection
+                                    const isGroup = !!item.querySelector('[data-testid="group"]');
+                                    const isMuted = !!item.querySelector('[data-testid="muted"]');
+                                    
                                     unreadItems.push({
                                         title: title,
                                         unreadCount: unreadCount,
-                                        lastMessage: lastMessage,
-                                        timestamp: timestamp,
                                         isGroup: isGroup,
                                         isMuted: isMuted,
                                         type: isGroup ? 'group' : 'contact'
                                     });
+                                    
+                                    console.log(`Added unread chat: ${title} with ${unreadCount} messages`);
                                 }
                             } catch (itemError) {
                                 console.log('Error processing chat item:', itemError);
                             }
                         });
 
-                        // Sort by unread count (most unread first)
-                        return unreadItems.sort((a, b) => b.unreadCount - a.unreadCount);
+                        console.log(`Found ${unreadItems.length} unread chats`);
+                        return unreadItems;
                     } catch (evalError) {
                         console.log('Error in page.evaluate:', evalError);
                         return [];
@@ -144,8 +214,6 @@ async function startWhatsAppBot() {
                     for (const chat of unreadChats) {
                         console.log(`\n${chat.isGroup ? '👥' : '👤'} ${chat.title} ${chat.isMuted ? '🔇' : ''}`);
                         console.log(`📩 ${chat.unreadCount} unread message(s)`);
-                        console.log(`💬 Last message: ${chat.lastMessage}`);
-                        console.log(`🕒 ${chat.timestamp}`);
                         console.log('----------------------------');
 
                         // Add chat name to our list
@@ -174,88 +242,163 @@ async function startWhatsAppBot() {
                     console.log(`Individual chats: ${individualChats.length}`);
                     console.log(`Group chats: ${groupChats.length}`);
 
-                    // Only search for the first chat in the list
-                    if (unreadChatNames.length > 0) {
-                        const firstChat = unreadChatNames[0];
-                        console.log(`\nSearching first chat: ${firstChat.name}`);
-                        
-                        // Click the search button
-                        await page.waitForSelector('button._ai0b._ai08[aria-label="Search or start new chat"]');
-                        await page.evaluate(() => {
-                            const searchButton = document.querySelector('button._ai0b._ai08[aria-label="Search or start new chat"]');
-                            if (searchButton) searchButton.click();
-                        });
-
-                        // Wait for search input to be ready
-                        await new Promise(resolve => setTimeout(resolve, 2000));
-                        await page.waitForSelector('div[contenteditable="true"][data-tab="3"]');
-
-                        // Clear any existing search text
-                        await page.evaluate(() => {
-                            const searchInput = document.querySelector('div[contenteditable="true"][data-tab="3"]');
-                            if (searchInput) {
-                                searchInput.textContent = '';
-                                searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+                    // Process all chats in the list
+                    for (const chat of unreadChatNames) {
+                        try {
+                            console.log(`\nProcessing chat: ${chat.name}`);
+                            
+                            try {
+                                // Try the original search button selector first
+                                await page.waitForSelector('button._ai0b._ai08[aria-label="Search or start new chat"]', { timeout: 5000 });
+                                await page.evaluate(() => {
+                                    const searchButton = document.querySelector('button._ai0b._ai08[aria-label="Search or start new chat"]');
+                                    if (searchButton) searchButton.click();
+                                });
+                            } catch (searchError) {
+                                try {
+                                    console.log('Trying alternative search button...');
+                                    // Try the alternative search button
+                                    await page.waitForSelector('span[data-icon="search"]', { timeout: 5000 });
+                                    await page.click('span[data-icon="search"]');
+                                } catch (altSearchError) {
+                                    console.error(`Failed to click search button for chat ${chat.name}, moving to next chat...`);
+                                    continue;  // Skip to the next chat
+                                }
                             }
-                        });
 
-                        // Type the chat name using page.type()
-                        await page.type('div[contenteditable="true"][data-tab="3"]', firstChat.name);
-                        console.log('Typed chat name:', firstChat.name);
+                            // Wait for search input to be ready
+                            await new Promise(resolve => setTimeout(resolve, 2000));
+                            await page.waitForSelector('div[contenteditable="true"][data-tab="3"]');
 
-                        // Wait for 2 seconds before pressing Enter
-                        await new Promise(resolve => setTimeout(resolve, 2000));
-                        console.log('Waiting 2 seconds before pressing Enter...');
+                            // Clear any existing search text
+                            await page.evaluate(() => {
+                                const searchInput = document.querySelector('div[contenteditable="true"][data-tab="3"]');
+                                if (searchInput) {
+                                    searchInput.textContent = '';
+                                    searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+                                }
+                            });
 
-                        // Press Enter
-                        await page.keyboard.press('Enter');
-                        console.log('Pressed Enter key');
+                            // Type the chat name using page.type()
+                            await page.type('div[contenteditable="true"][data-tab="3"]', chat.name);
+                            console.log('Typed chat name:', chat.name);
 
-                        // Wait for chat container to load
-                        await page.waitForSelector('div[role="application"]');
-                        console.log('Chat container loaded');
+                            // Wait for search results to appear
+                            await new Promise(resolve => setTimeout(resolve, 2000));
 
-                        // Return to search form by clicking search button again
-                        await page.waitForSelector('button._ai0b._ai08[aria-label="Search or start new chat"]');
-                        await page.evaluate(() => {
-                            const searchButton = document.querySelector('button._ai0b._ai08[aria-label="Search or start new chat"]');
-                            if (searchButton) searchButton.click();
-                        });
-                        console.log('Returned to search form');
+                            // Press Enter and wait for chat to load
+                            await page.keyboard.press('Enter');
+                            console.log('Pressed Enter key');
 
-                        // Wait for search input to be ready
-                        await new Promise(resolve => setTimeout(resolve, 2000));
-                        await page.waitForSelector('div[aria-label="Search"][role="textbox"]');
+                            // Wait for chat container to load
+                            await page.waitForSelector('div[role="application"]', { timeout: 10000 });
+                            console.log('Chat container loaded');
 
-                        // Clear the search form by pressing backspace
-                        const inputValue = await page.$eval('div[aria-label="Search"][role="textbox"]', el => el.textContent.length);
-                        for (let i = 0; i < inputValue; i++) {
-                            await page.keyboard.press('Backspace');
-                        }
-                        console.log('Cleared search form using backspace');
+                            // Fetch messages from the chat
+                            const messages = await page.evaluate(() => {
+                                const messageElements = document.querySelectorAll('div[class*="_amjv"]');
+                                return Array.from(messageElements).map(msg => {
+                                    const messageText = msg.querySelector('span.selectable-text.copyable-text');
+                                    const timestamp = msg.querySelector('span[class*="x1c4vz4f x2lah0s"]');
+                                    const isOutgoing = msg.classList.contains('message-out');
+                                    
+                                    return {
+                                        text: messageText ? messageText.textContent : '',
+                                        time: timestamp ? timestamp.textContent : '',
+                                        type: isOutgoing ? 'sent' : 'received'
+                                    };
+                                }).filter(m => m.text);
+                            });
 
-                        // Fetch messages from the chat
-                        const messages = await page.evaluate(() => {
-                            const messageElements = document.querySelectorAll('div[class*="_amjv"]');
-                            return Array.from(messageElements).map(msg => {
-                                const messageText = msg.querySelector('span.selectable-text.copyable-text');
-                                const timestamp = msg.querySelector('span[class*="x1c4vz4f x2lah0s"]');
-                                const isOutgoing = msg.classList.contains('message-out');
+                            console.log(`Messages from ${chat.name}:`, messages);
+
+                            // Save messages to JSON file if there are any
+                            if (messages.length > 0) {
+                                await saveMessagesToJson(chat.name, messages, chat.isGroup);
+                            }
+
+                            // If messages array is empty, try clicking search and move to next chat
+                            if (messages.length === 0) {
+                                console.log('No messages found, trying to click search and move to next chat...');
+                                try {
+                                    await page.waitForSelector('span[data-icon="search"]', { timeout: 5000 });
+                                    await page.click('span[data-icon="search"]');
+                                    
+                                    // Wait for the chat list to be visible again
+                                    await page.waitForSelector('div[role="grid"][aria-label="Chat list"]', { timeout: 10000 });
+                                    
+                                    // Wait before processing next chat
+                                    await new Promise(resolve => setTimeout(resolve, 3000));
+                                    console.log(`Skipping chat ${chat.name} due to no messages`);
+                                    continue;
+                                } catch (searchError) {
+                                    console.error('Failed to click search button:', searchError.message);
+                                }
+                            }
+
+                            // Click back button to return to chat list
+                            await page.evaluate(() => {
+                                const backButton = document.querySelector('div._ah_x._ai0a span[data-icon="back"]');
+                                if (backButton) {
+                                    backButton.parentElement.click();
+                                }
+                            });
+
+                            // Wait for the chat list to be visible again
+                            await page.waitForSelector('div[role="grid"][aria-label="Chat list"]', { timeout: 10000 });
+                            
+                            // Wait before processing next chat
+                            await new Promise(resolve => setTimeout(resolve, 3000));
+                            console.log(`Finished processing chat: ${chat.name}`);
+
+                        } catch (error) {
+                            console.error(`Error processing chat ${chat.name}:`, error.message);
+                            
+                            // If error is about chat list selector timing out, try search button first
+                            if (error.message.includes('Waiting for selector `div[role="grid"][aria-label="Chat list"]` failed')) {
+                                try {
+                                    console.log('Chat list timeout detected, trying search button...');
+                                    await page.waitForSelector('span[data-icon="search"]', { timeout: 5000 });
+                                    await page.click('span[data-icon="search"]');
+                                    
+                                    // Wait chat list to appear
+                                    await page.waitForSelector('div[role="grid"][aria-label="Chat list"]', { timeout: 10000 });
+                                    
+                                    // Add delay before next chat
+                                    await new Promise(resolve => setTimeout(resolve, 3000));
+                                    console.log(`Moving to next chat after search button click`);
+                                    continue;
+                                } catch (searchError) {
+                                    console.error('Failed to click search button:', searchError.message);
+                                }
+                            }
+                            
+                            // Try to return to chat list if there's an error
+                            try {
+                                await page.evaluate(() => {
+                                    const backButton = document.querySelector('div._ah_x._ai0a span[data-icon="back"]');
+                                    if (backButton) {
+                                        backButton.parentElement.click();
+                                    }
+                                });
+                                await page.waitForSelector('div[role="grid"][aria-label="Chat list"]', { timeout: 10000 });
+                            } catch (backError) {
+                                console.error('Could not return to chat list:', backError.message);
                                 
-                                return {
-                                    text: messageText ? messageText.textContent : '',
-                                    time: timestamp ? timestamp.textContent : '',
-                                    type: isOutgoing ? 'sent' : 'received'
-                                };
-                            }).filter(m => m.text);
-                        });
-
-                        console.log('Chat messages:', messages);
-
-                        // Click the search icon using page.click()
-                        await page.waitForSelector('span[data-icon="search"]');
-                        await page.click('span[data-icon="search"]');
-                        console.log('Clicked search icon');
+                                // If back button fails, try search button as last resort
+                                try {
+                                    console.log('Back button failed, trying search button as last resort...');
+                                    await page.waitForSelector('span[data-icon="search"]', { timeout: 5000 });
+                                    await page.click('span[data-icon="search"]');
+                                    await new Promise(resolve => setTimeout(resolve, 3000));
+                                } catch (finalError) {
+                                    console.error('All recovery attempts failed');
+                                }
+                            }
+                            
+                            // Continue with next chat
+                            continue;
+                        }
                     }
                 } else {
                     console.log('No unread messages found.');
