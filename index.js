@@ -76,12 +76,12 @@ async function startWhatsAppBot() {
                 console.log(`Attempting to switch to ${filterType} filter...`);
                 
                 // Wait for the filter buttons to be present
-                await page.waitForSelector('[role="tablist"][aria-label="chat-list-filters"]', { timeout: 10000 });
+                await page.waitForSelector('[role="tablist"][aria-label="chat-list-filters"]', { timeout: 5000 });
                 console.log('Found filter tablist');
                 
                 // Use the exact ID for the filter button
                 const buttonSelector = `#${filterType}-filter`;
-                await page.waitForSelector(buttonSelector, { timeout: 10000 });
+                await page.waitForSelector(buttonSelector, { timeout: 5000 });
                 console.log('Found filter button');
                 
                 // Click the button using evaluate for a more direct click
@@ -291,7 +291,7 @@ async function startWhatsAppBot() {
                             console.log('Pressed Enter key');
 
                             // Wait for chat container to load
-                            await page.waitForSelector('div[role="application"]', { timeout: 10000 });
+                            await page.waitForSelector('div[role="application"]', { timeout: 3000 });
                             console.log('Chat container loaded');
 
                             // Fetch messages from the chat
@@ -325,7 +325,7 @@ async function startWhatsAppBot() {
                                     await page.click('span[data-icon="search"]');
                                     
                                     // Wait for the chat list to be visible again
-                                    await page.waitForSelector('div[role="grid"][aria-label="Chat list"]', { timeout: 10000 });
+                                    await page.waitForSelector('div[role="grid"][aria-label="Chat list"]', { timeout: 3000 });
                                     
                                     // Wait before processing next chat
                                     await new Promise(resolve => setTimeout(resolve, 3000));
@@ -345,7 +345,7 @@ async function startWhatsAppBot() {
                             });
 
                             // Wait for the chat list to be visible again
-                            await page.waitForSelector('div[role="grid"][aria-label="Chat list"]', { timeout: 10000 });
+                            await page.waitForSelector('div[role="grid"][aria-label="Chat list"]', { timeout: 3000 });
                             
                             // Wait before processing next chat
                             await new Promise(resolve => setTimeout(resolve, 3000));
@@ -362,7 +362,7 @@ async function startWhatsAppBot() {
                                     await page.click('span[data-icon="search"]');
                                     
                                     // Wait chat list to appear
-                                    await page.waitForSelector('div[role="grid"][aria-label="Chat list"]', { timeout: 10000 });
+                                    await page.waitForSelector('div[role="grid"][aria-label="Chat list"]', { timeout: 3000 });
                                     
                                     // Add delay before next chat
                                     await new Promise(resolve => setTimeout(resolve, 3000));
@@ -381,7 +381,7 @@ async function startWhatsAppBot() {
                                         backButton.parentElement.click();
                                     }
                                 });
-                                await page.waitForSelector('div[role="grid"][aria-label="Chat list"]', { timeout: 10000 });
+                                await page.waitForSelector('div[role="grid"][aria-label="Chat list"]', { timeout: 3000 });
                             } catch (backError) {
                                 console.error('Could not return to chat list:', backError.message);
                                 

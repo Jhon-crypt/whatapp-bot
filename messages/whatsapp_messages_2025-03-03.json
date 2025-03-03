@@ -1,0 +1,456 @@
+{
+  "date": "2025-03-03",
+  "last_updated": "2025-03-03T09:45:04.385Z",
+  "chats": {
+    "OLADELE’s❤️": {
+      "chatName": "OLADELE’s❤️",
+      "isGroup": false,
+      "last_updated": "2025-03-03T08:54:27.155Z",
+      "messages": [
+        {
+          "text": "Good morning \n\nFirst dose;\nDaily Bible Reading for today Sunday \n02/03/25\n\nExod.       21\nPsalms     62 and 63\nActs    11:19-30\n \nAs you are waiting on God,  you will never be put to shame.",
+          "time": "6:49 am",
+          "type": "received"
+        },
+        {
+          "text": "Amen, good morning",
+          "time": "6:50 am",
+          "type": "received"
+        },
+        {
+          "text": "Good morning \n\nFirst dose;\nDaily Bible Reading for today Monday \n03/03/25\n\nExod.     22:1 to 23\nPsalms   64 and 65\nActs      12\n\nGod shall crown this year with goodness and our parths shall drop fatness.",
+          "time": "8:16 am",
+          "type": "received"
+        },
+        {
+          "text": "Amen, good morning house",
+          "time": "8:20 am",
+          "type": "received"
+        },
+        {
+          "text": "Good morning ma God will surprise us beyond our expectations and meet us at the point of our needs in Jesus Christ name have a wonderful new week everyone oooo in Jesus Christ name",
+          "time": "8:22 am",
+          "type": "received"
+        },
+        {
+          "text": "Thank you very much my princess and everyone in the house for making my day beautiful oooo i really appreciate it oooo God bless all of you abundantly forever gbogbo yin ni e o dagba ti e o si fi erigi jobi in Jesus Christ name once again a big thanks to all of you",
+          "time": "8:29 am",
+          "type": "received"
+        },
+        {
+          "text": "Amiiiii Ooooo Baba Wa, Baba Oluwatomiwa, Baba Toluwani Nini",
+          "time": "8:33 am",
+          "type": "received"
+        },
+        {
+          "text": "Amen my daddy",
+          "time": "8:34 am",
+          "type": "received"
+        }
+      ]
+    },
+    "Blessed family devotional ": {
+      "chatName": "Blessed family devotional ",
+      "isGroup": false,
+      "last_updated": "2025-03-03T08:59:10.421Z",
+      "messages": [
+        {
+          "text": "OPEN HEAVENS DAILY DEVOTIONAL \n\nDATE: MONDAY MARCH 3RD 2025\n\nTOPIC: FOR HIS PLEASURE\n\nMEMORISE:\n“Thou art worthy, O Lord, to receive glory and honour and power: for thou hast created all things, and for thy pleasure they are and were created.” Revelation 4:11\n\nREAD: MARK 8:22-26 (KJV)\nAnd he cometh to Bethsaida; and they bring a blind man unto him, and besought him to touch him.\n\nAnd he took the blind man by the hand, and led him out of the town; and when he had spit on his eyes, and put his hands upon him, he asked him if he saw ought.\n\nAnd he looked up, and said, I see men as trees, walking.\n\nAfter that he put his hands again upon his eyes, and made him look up: and he was restored, and saw every man clearly.\n\nAnd he sent him away to his house, saying…",
+          "time": "11:49 PM",
+          "type": "received"
+        }
+      ]
+    },
+    "StackerAgent": {
+      "chatName": "StackerAgent",
+      "isGroup": false,
+      "last_updated": "2025-03-03T08:55:02.135Z",
+      "messages": [
+        {
+          "text": "Below is an illustrative example of how you could build a small “SDK” (in Rust) to parse Solana transactions as received from a Geyser plugin.  This example is not official code from Solana Labs, and it is not meant to be a full production-ready library—but it outlines the design, logic, and data structures you might need to handle virtually every transaction type and corner case.\n\n\tDisclaimer\n\t\t1.\tThis is a large undertaking; handling “every edge case” and “all transaction types” in Solana can grow quite complex, especially with new program versions and custom on-chain programs.\n\t2.\tThis example focuses primarily on the standard (built-in) Solana programs (System, SPL Token, Stake, Vote, etc.). If you want to handle custom program instructions (e.g. Metaple…",
+          "time": "6:06 pm",
+          "type": "received"
+        },
+        {
+          "text": "That's what I am saying. The SDK the guy is writing is to cover all transactions. Tes already spoke with him and he said this weekend",
+          "time": "6:07 pm",
+          "type": "received"
+        },
+        {
+          "text": "Great way to communicate that with me:\n\nHey Gary we ran into an issue with the token parser. We have someone working on a full sdk to solve that but that’s 1 week out. We will keep you posted.  \n\nIn the meantime we will shift to the program to land our transactions and get that built.",
+          "time": "6:18 pm",
+          "type": "received"
+        },
+        {
+          "text": "Good morning Gary. I am yet to get update from the guy. I dropped a message for Tes now to call him this morning",
+          "time": "6:30 am",
+          "type": "received"
+        }
+      ]
+    },
+    "OGUN TECH COMMUNITY (OTC)": {
+      "chatName": "OGUN TECH COMMUNITY (OTC)",
+      "isGroup": false,
+      "last_updated": "2025-03-03T09:43:46.917Z",
+      "messages": [
+        {
+          "text": "CONTACT FILE DROPS SOON\n\nDo you want more views on WhatsApp and more Instagram followers. Join only 1\n. https://chat.whatsapp.com/H24vuoL6K4M9FIjF8JFEtr\n  https://chat.whatsapp.com/L6MZt4qcT9iDskWMDBR1uP\n  https://chat.whatsapp.com/JDDcqvay1YX0Nwj3itc20A\n\nhttps://chat.whatsapp.com/B6loMWmE7z2K1EfOAeeTVs\n\nhttps://chat.whatsapp.com/JCG7b3U90Kz04vMkClATfZ",
+          "time": "10:15 AM",
+          "type": "received"
+        }
+      ]
+    },
+    "Hello-send": {
+      "chatName": "Hello-send",
+      "isGroup": false,
+      "last_updated": "2025-03-03T09:44:07.749Z",
+      "messages": [
+        {
+          "text": "CONTACT FILE DROPS SOON\n\nDo you want more views on WhatsApp and more Instagram followers. Join only 1\n. https://chat.whatsapp.com/H24vuoL6K4M9FIjF8JFEtr\n  https://chat.whatsapp.com/L6MZt4qcT9iDskWMDBR1uP\n  https://chat.whatsapp.com/JDDcqvay1YX0Nwj3itc20A\n\nhttps://chat.whatsapp.com/B6loMWmE7z2K1EfOAeeTVs\n\nhttps://chat.whatsapp.com/JCG7b3U90Kz04vMkClATfZ",
+          "time": "10:15 AM",
+          "type": "received"
+        }
+      ]
+    },
+    "Promise & +234 706 526 1813": {
+      "chatName": "Promise & +234 706 526 1813",
+      "isGroup": false,
+      "last_updated": "2025-03-03T09:44:43.575Z",
+      "messages": [
+        {
+          "text": "Happy first Sunday",
+          "time": "6:53 AM",
+          "type": "received"
+        }
+      ]
+    },
+    "Index.html ~ Projects 🔥": {
+      "chatName": "Index.html ~ Projects 🔥",
+      "isGroup": false,
+      "last_updated": "2025-03-03T09:45:04.385Z",
+      "messages": [
+        {
+          "text": "Happy first Sunday",
+          "time": "6:53 AM",
+          "type": "received"
+        }
+      ]
+    },
+    "DevXP ByteBrewers": {
+      "chatName": "DevXP ByteBrewers",
+      "isGroup": false,
+      "last_updated": "2025-03-03T08:43:23.288Z",
+      "messages": [
+        {
+          "text": "Make i pity am",
+          "time": "7:22 PM",
+          "type": "received"
+        },
+        {
+          "text": "I don help am",
+          "time": "7:37 PM",
+          "type": "received"
+        },
+        {
+          "text": "Howfar",
+          "time": "7:04 PM",
+          "type": "received"
+        },
+        {
+          "text": "Gee",
+          "time": "9:42 AM",
+          "type": "received"
+        },
+        {
+          "text": "You don go ni ",
+          "time": "9:42 AM",
+          "type": "received"
+        },
+        {
+          "text": "We don move oooo",
+          "time": "",
+          "type": "received"
+        },
+        {
+          "text": "W",
+          "time": "",
+          "type": "received"
+        }
+      ]
+    },
+    "TheCodeGiant": {
+      "chatName": "TheCodeGiant",
+      "isGroup": false,
+      "last_updated": "2025-03-03T08:53:44.699Z",
+      "messages": [
+        {
+          "text": "We don move oooo",
+          "time": "",
+          "type": "received"
+        },
+        {
+          "text": "W",
+          "time": "",
+          "type": "received"
+        },
+        {
+          "text": "Oya now",
+          "time": "9:43 am",
+          "type": "received"
+        },
+        {
+          "text": "Me and lot wake youuuuuuu",
+          "time": "",
+          "type": "received"
+        },
+        {
+          "text": "You just dey smile for sleep",
+          "time": "",
+          "type": "received"
+        },
+        {
+          "text": "Slime ke ",
+          "time": "9:44 am",
+          "type": "received"
+        },
+        {
+          "text": "Ki olorun shanu",
+          "time": "9:44 am",
+          "type": "received"
+        },
+        {
+          "text": "Walai",
+          "time": "",
+          "type": "received"
+        },
+        {
+          "text": "Ko easy",
+          "time": "9:44 am",
+          "type": "received"
+        },
+        {
+          "text": "Tori moniwave yi na",
+          "time": "9:44 am",
+          "type": "received"
+        }
+      ]
+    },
+    "__homie amigo 💍� 🍭🍫✨💫": {
+      "chatName": "__homie amigo 💍� 🍭🍫✨💫",
+      "isGroup": false,
+      "last_updated": "2025-03-03T08:54:09.556Z",
+      "messages": [
+        {
+          "text": "Ohk oo",
+          "time": "5:26 pm",
+          "type": "received"
+        },
+        {
+          "text": "M with my sis",
+          "time": "5:26 pm",
+          "type": "received"
+        },
+        {
+          "text": "You don go house ni",
+          "time": "",
+          "type": "received"
+        },
+        {
+          "text": "No she came to visit \nShe's leaving tomorrow",
+          "time": "5:27 pm",
+          "type": "received"
+        },
+        {
+          "text": "Ehn ehn",
+          "time": "",
+          "type": "received"
+        },
+        {
+          "text": "Hiii",
+          "time": "",
+          "type": "received"
+        },
+        {
+          "text": "Haffa",
+          "time": "4:44 pm",
+          "type": "received"
+        },
+        {
+          "text": "How are you ma",
+          "time": "Edited",
+          "type": "received"
+        },
+        {
+          "text": "How was your dayyyyyy",
+          "time": "",
+          "type": "received"
+        },
+        {
+          "text": "I'm fine\nU?",
+          "time": "8:43 am",
+          "type": "received"
+        },
+        {
+          "text": "Sameeeeeee",
+          "time": "",
+          "type": "received"
+        }
+      ]
+    },
+    "Unknown subject": {
+      "chatName": "Unknown subject",
+      "isGroup": false,
+      "last_updated": "2025-03-03T08:54:44.642Z",
+      "messages": [
+        {
+          "text": "Good morning \n\nFirst dose;\nDaily Bible Reading for today Sunday \n02/03/25\n\nExod.       21\nPsalms     62 and 63\nActs    11:19-30\n \nAs you are waiting on God,  you will never be put to shame.",
+          "time": "6:49 am",
+          "type": "received"
+        },
+        {
+          "text": "Amen, good morning",
+          "time": "6:50 am",
+          "type": "received"
+        },
+        {
+          "text": "Good morning \n\nFirst dose;\nDaily Bible Reading for today Monday \n03/03/25\n\nExod.     22:1 to 23\nPsalms   64 and 65\nActs      12\n\nGod shall crown this year with goodness and our parths shall drop fatness.",
+          "time": "8:16 am",
+          "type": "received"
+        },
+        {
+          "text": "Amen, good morning house",
+          "time": "8:20 am",
+          "type": "received"
+        },
+        {
+          "text": "Good morning ma God will surprise us beyond our expectations and meet us at the point of our needs in Jesus Christ name have a wonderful new week everyone oooo in Jesus Christ name",
+          "time": "8:22 am",
+          "type": "received"
+        },
+        {
+          "text": "Thank you very much my princess and everyone in the house for making my day beautiful oooo i really appreciate it oooo God bless all of you abundantly forever gbogbo yin ni e o dagba ti e o si fi erigi jobi in Jesus Christ name once again a big thanks to all of you",
+          "time": "8:29 am",
+          "type": "received"
+        },
+        {
+          "text": "Amiiiii Ooooo Baba Wa, Baba Oluwatomiwa, Baba Toluwani Nini",
+          "time": "8:33 am",
+          "type": "received"
+        },
+        {
+          "text": "Amen my daddy",
+          "time": "8:34 am",
+          "type": "received"
+        }
+      ]
+    },
+    "D-ARAGON DAO": {
+      "chatName": "D-ARAGON DAO",
+      "isGroup": false,
+      "last_updated": "2025-03-03T09:01:30.361Z",
+      "messages": [
+        {
+          "text": "LayerEdge Phase 2 Incentive Testnet Update\n\n Pledge Pass Mint.. Go To Tasks Section & Complete Active Tasks To Earn Edge points\n\nTwo Pledge Pass For Minting :\n\nStandard Pass [ Free + 1.2x Boost ]\nOG Pass [ 2$ Fees Refundable On TGE + 3x Boost ]\n\nMake sure to mint the OG pledge badge costing just $2 fees to get a 3x boost.\n\nPhase 2 Ends On 22nd March - Looks Like TGE In April \n\nJoy's coming Guys... Get positioned if you've not.\n\nFree of Cost ($0)\n$EDGE Drop Confirmed \n\n Join   https://dashboard.layeredge.io\n\nUse code: SeIRyyRo\n\n Connect Wallet & click on start node to start Running Light Node \n\n Earn Points For Each Session You Run\n\nCheck in Daily!!! \n\nDone .",
+          "time": "media-download",
+          "type": "received"
+        }
+      ]
+    },
+    "Godwin Clothes": {
+      "chatName": "Godwin Clothes",
+      "isGroup": false,
+      "last_updated": "2025-03-03T09:02:20.815Z",
+      "messages": [
+        {
+          "text": "I did not see you again",
+          "time": "5:07 PM",
+          "type": "received"
+        }
+      ]
+    },
+    "Platoon 7 TEAM WORK(AYIIIII)": {
+      "chatName": "Platoon 7 TEAM WORK(AYIIIII)",
+      "isGroup": false,
+      "last_updated": "2025-03-03T09:02:38.656Z",
+      "messages": [
+        {
+          "text": "Okay boss.",
+          "time": "1:42 AM",
+          "type": "received"
+        }
+      ]
+    },
+    "RUST/CANISTER DEV": {
+      "chatName": "RUST/CANISTER DEV",
+      "isGroup": false,
+      "last_updated": "2025-03-03T09:02:56.486Z",
+      "messages": [
+        {
+          "text": "Hult Prize is taking over campus!  Get ready for a movement that will challenge, inspire, and empower you to change the world! \n\nClick the link below to learn more and join the movement!  https://chat.whatsapp.com/HKzBXn8n2uBAoB8drcvBDH\n\n#HultPrizeTASUED2025 #HultPrizeTASUED #HultPrize #HultPrize2025 #SomethingBigIsComing  #TASUEDgetsReady ",
+          "time": "12:35 AM",
+          "type": "received"
+        }
+      ]
+    },
+    "Web3/block chain dev group": {
+      "chatName": "Web3/block chain dev group",
+      "isGroup": false,
+      "last_updated": "2025-03-03T09:03:06.953Z",
+      "messages": [
+        {
+          "text": "Hult Prize is taking over campus!  Get ready for a movement that will challenge, inspire, and empower you to change the world! \n\nClick the link below to learn more and join the movement!  https://chat.whatsapp.com/HKzBXn8n2uBAoB8drcvBDH\n\n#HultPrizeTASUED2025 #HultPrizeTASUED #HultPrize #HultPrize2025 #SomethingBigIsComing  #TASUEDgetsReady ",
+          "time": "12:35 AM",
+          "type": "received"
+        }
+      ]
+    },
+    "Vos finalist💻⌨🖱🖨": {
+      "chatName": "Vos finalist💻⌨🖱🖨",
+      "isGroup": false,
+      "last_updated": "2025-03-03T09:43:26.158Z",
+      "messages": [
+        {
+          "text": "CONTACT FILE DROPS SOON\n\nDo you want more views on WhatsApp and more Instagram followers. Join only 1\n. https://chat.whatsapp.com/H24vuoL6K4M9FIjF8JFEtr\n  https://chat.whatsapp.com/L6MZt4qcT9iDskWMDBR1uP\n  https://chat.whatsapp.com/JDDcqvay1YX0Nwj3itc20A\n\nhttps://chat.whatsapp.com/B6loMWmE7z2K1EfOAeeTVs\n\nhttps://chat.whatsapp.com/JCG7b3U90Kz04vMkClATfZ",
+          "time": "10:15 AM",
+          "type": "received"
+        }
+      ]
+    },
+    "D.O.V (General)": {
+      "chatName": "D.O.V (General)",
+      "isGroup": false,
+      "last_updated": "2025-03-03T09:43:36.533Z",
+      "messages": [
+        {
+          "text": "CONTACT FILE DROPS SOON\n\nDo you want more views on WhatsApp and more Instagram followers. Join only 1\n. https://chat.whatsapp.com/H24vuoL6K4M9FIjF8JFEtr\n  https://chat.whatsapp.com/L6MZt4qcT9iDskWMDBR1uP\n  https://chat.whatsapp.com/JDDcqvay1YX0Nwj3itc20A\n\nhttps://chat.whatsapp.com/B6loMWmE7z2K1EfOAeeTVs\n\nhttps://chat.whatsapp.com/JCG7b3U90Kz04vMkClATfZ",
+          "time": "10:15 AM",
+          "type": "received"
+        }
+      ]
+    },
+    "The Destiny Nwebe Crib Community": {
+      "chatName": "The Destiny Nwebe Crib Community",
+      "isGroup": false,
+      "last_updated": "2025-03-03T09:43:57.396Z",
+      "messages": [
+        {
+          "text": "CONTACT FILE DROPS SOON\n\nDo you want more views on WhatsApp and more Instagram followers. Join only 1\n. https://chat.whatsapp.com/H24vuoL6K4M9FIjF8JFEtr\n  https://chat.whatsapp.com/L6MZt4qcT9iDskWMDBR1uP\n  https://chat.whatsapp.com/JDDcqvay1YX0Nwj3itc20A\n\nhttps://chat.whatsapp.com/B6loMWmE7z2K1EfOAeeTVs\n\nhttps://chat.whatsapp.com/JCG7b3U90Kz04vMkClATfZ",
+          "time": "10:15 AM",
+          "type": "received"
+        }
+      ]
+    },
+    "My Mummy 1": {
+      "chatName": "My Mummy 1",
+      "isGroup": false,
+      "last_updated": "2025-03-03T09:44:33.198Z",
+      "messages": [
+        {
+          "text": "Happy first Sunday",
+          "time": "6:53 AM",
+          "type": "received"
+        }
+      ]
+    }
+  }
+}
